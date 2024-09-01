@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f7f7f7;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 500px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .payment-details {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .payment-details p {
+            font-size: 18px;
+            color: #555;
+        }
+
+        .payment-options {
+            display: flex;
+            justify-content: center; /* Center options horizontally */
+            margin-bottom: 20px;
+        }
+
+        .payment-option {
+            width: 100px; /* Adjust size */
+            text-align: center;
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: border-color 0.3s ease;
+        }
+
+        .payment-option img {
+            width: 100%;
+            height: auto;
+        }
+
+        .payment-option:hover {
+            border-color: #0070ba;
+        }
+
+        .selected {
+            border-color: #0070ba;
+        }
+
+        .payment-buttons {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .payment-buttons button {
+            padding: 10px 20px;
+            background-color: #0070ba;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .payment-buttons button:hover {
+            background-color: #005ea6;
+        }
+
+        #paypal-button-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        #card-form {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Checkout</h2>
+        <div class="payment-details">
+            <p>Total Amount: $10.00</p>
+        </div>
+
+        <div class="payment-options">
+            <div class="payment-option selected" id="paypal-option">
+                <img src="https://www.paypalobjects.com/webstatic/mktg/logo/pp_cc_mark_74x46.jpg" alt="PayPal">
+            </div>
+        </div>
+
+        <div id="paypal-button-container"></div>
+    </div>
+
+    <script src="https://www.paypal.com/sdk/js?client-id=AZC__EsonHtU5JUGTIZRrg5vBXYy8l_S2m0woTh2S2TSiWmSANoqKXntIunKqzhCJQsNKdL2P4U1n8aW"></script>
+    <script>
+        paypal.Buttons({
+            createOrder: function(data, actions) {
+                return actions.order.create({
+                    purchase_units: [{
+                        amount: {
+                            value: '10.00'
+                        }
+                    }]
+                });
+            },
+            onApprove: function(data, actions) {
+                return actions.order.capture().then(function(details) {
+                    alert('Transaction completed by ' + details.payer.name.given_name);
+                });
+            },
+            onError: function(err) {
+                console.error('An error occurred:', err);
+            }
+        }).render('#paypal-button-container');
+    </script>
+</body>
+</html>
